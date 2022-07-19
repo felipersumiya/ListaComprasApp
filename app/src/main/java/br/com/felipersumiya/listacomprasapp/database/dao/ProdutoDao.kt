@@ -14,7 +14,7 @@ interface ProdutoDao {
     @Query("SELECT * FROM Produto WHERE id= :produtoId")
     fun getById(produtoId:Long) : Produto
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(produto:Produto)
 
     @Delete

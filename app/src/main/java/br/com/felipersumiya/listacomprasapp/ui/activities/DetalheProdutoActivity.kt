@@ -1,5 +1,6 @@
 package br.com.felipersumiya.listacomprasapp.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -31,11 +32,11 @@ class DetalheProdutoActivity :AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        buscaProduto()
+        inicializaProduto()
 
     }
 
-    private fun buscaProduto() {
+    private fun inicializaProduto() {
 
         produtoId = intent.getLongExtra(ConstantsProduto.PRODUTO_ID,0L)
         Log.i(TAG2, "produtoId: $produtoId")
@@ -44,6 +45,7 @@ class DetalheProdutoActivity :AppCompatActivity() {
 
 
         if(produtoCarregado!=null){
+            produto = produtoCarregado
             Log.i(TAG2, "produto carregado: $produtoCarregado")
             preencheCampos(produtoCarregado)
         }
@@ -72,13 +74,20 @@ class DetalheProdutoActivity :AppCompatActivity() {
 
             R.id.menu_detalhe_editar ->{
 
+                val intent = Intent(this, CadastrarProdutoActivity::class.java)
+                intent.putExtra(ConstantsProduto.PRODUTO_ID, produtoId)
+
+                startActivity(intent)
+
                 Toast.makeText(this, "Clicou no menu para editar", Toast.LENGTH_LONG).show()
 
 
             }
 
             R.id.menu_detalhe_remove -> {
-
+                //Criar um dialog
+                produtoDao.delete(produto)
+                finish()
                 Toast.makeText(this, "Clicou no menu para remover", Toast.LENGTH_LONG).show()
             }
 
